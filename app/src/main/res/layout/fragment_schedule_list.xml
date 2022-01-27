@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.saklayen.scheduler.ui.home.CurrencyConvertViewModel" />
+            type="com.saklayen.scheduler.ui.schedule.ScheduleViewModel" />
 
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout

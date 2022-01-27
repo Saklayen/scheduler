@@ -1,4 +1,4 @@
-package com.saklayen.scheduler.uii.home
+package com.saklayen.scheduler.ui.home
 
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter

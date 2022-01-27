@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.saklayen.scheduler.uii.home.HomeViewModel" />
+            type="com.saklayen.scheduler.ui.home.HomeViewModel" />
 
         <variable
             name="item"

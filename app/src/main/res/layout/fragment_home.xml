@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.saklayen.scheduler.uii.home.HomeViewModel" />
+            type="com.saklayen.scheduler.ui.home.HomeViewModel" />
 
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout

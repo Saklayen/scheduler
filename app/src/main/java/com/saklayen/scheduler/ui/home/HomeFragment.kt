@@ -1,4 +1,4 @@
-package com.saklayen.scheduler.uii.home
+package com.saklayen.scheduler.ui.home
 
 import android.content.pm.PackageInfo
 import android.os.Bundle
@@ -26,13 +26,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         launchAndRepeatWithViewLifecycle {
             launch {
                 viewModel.navigationActions.collect {
-                    navigate(HomeFragmentDirections.navigateToScheduleFragment(it.appName, it.packageName))
+                    navigate(
+                        HomeFragmentDirections.navigateToScheduleFragment(
+                            it.appIndex,
+                            it.appName,
+                            it.packageName
+                        )
+                    )
                 }
             }
 
             launch {
                 viewModel.getInstalledApps.collect {
-                  viewModel.applicationList.value =   getInstalledApps(false)
+                    viewModel.applicationList.value = getInstalledApps(false)
 
                 }
             }
@@ -48,6 +54,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 continue
             }
             val appInfo = App(
+                i,
                 p.applicationInfo.loadLabel(requireActivity().packageManager).toString(),
                 p.packageName
                 //p.applicationInfo.loadIcon(requireActivity().packageManager)

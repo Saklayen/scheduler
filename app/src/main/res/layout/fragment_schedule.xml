@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.saklayen.scheduler.uii.schedule.ScheduleViewModel" />
+            type="com.saklayen.scheduler.ui.schedule.ScheduleViewModel" />
 
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -79,11 +79,32 @@
                 style="@style/TextSubTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{viewModel.appName}"
+                app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                app:layout_constraintStart_toStartOf="@id/start_guideline"
+                app:layout_constraintTop_toTopOf="@id/top_guideline"
+                tools:text="App Name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@id/start_guideline"
                 app:layout_constraintEnd_toEndOf="@id/end_guideline"
-                app:layout_constraintTop_toTopOf="@id/top_guideline"
-                android:text="@{viewModel.appName}"
-                tools:text="App Name"/>
+                app:layout_constraintTop_toBottomOf="@id/app_name"
+                app:layout_constraintBottom_toTopOf="@+id/set_schedule"
+                android:text="@{viewModel.schedule}"
+                tools:text="Scheduled on: 12.07 PM"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/set_schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/start_guideline"
+                app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/app_name"
+                app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+                android:onClick="@{()->viewModel.onClickSetSchedule()}"
+                android:text="Set Schedule"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

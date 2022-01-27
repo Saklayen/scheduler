@@ -1,4 +1,4 @@
-package com.saklayen.scheduler.uii
+package com.saklayen.scheduler.ui
 
 import android.os.Bundle
 import com.saklayen.scheduler.R

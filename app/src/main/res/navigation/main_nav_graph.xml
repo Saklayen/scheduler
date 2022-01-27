@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.saklayen.scheduler.uii.home.HomeFragment"
+        android:name="com.saklayen.scheduler.ui.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/navigate_to_schedule_list_fragment"
@@ -17,12 +17,14 @@
     </fragment>
     <fragment
         android:id="@+id/scheduleListFragment"
-        android:name="com.saklayen.scheduler.uii.schedulelist.ScheduleListFragment"
+        android:name="com.saklayen.scheduler.ui.schedulelist.ScheduleListFragment"
         android:label="@string/schedule_list" />
     <fragment
         android:id="@+id/scheduleFragment"
-        android:name="com.saklayen.scheduler.uii.schedule.ScheduleFragment"
+        android:name="com.saklayen.scheduler.ui.schedule.ScheduleFragment"
         android:label="@string/schedule">
+        <argument android:name="appIndex"
+            app:argType="integer"/>
         <argument android:name="appName"
             app:argType="string"/>
         <argument android:name="packageName"
