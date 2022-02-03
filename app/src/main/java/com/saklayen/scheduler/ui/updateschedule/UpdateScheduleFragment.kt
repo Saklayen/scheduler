@@ -32,7 +32,7 @@ class UpdateScheduleFragment : BaseFragment<FragmentUpdateScheduleBinding>(R.lay
         binding.viewModel = viewModel
 
         viewModel.rowId.value = args.schedule.rowid
-        viewModel.requestCode.value = Integer.parseInt(args.schedule.requestCode)
+        viewModel.requestCode.value = args.schedule.requestCode
         viewModel.appName.value = args.schedule.appName
         viewModel.packageName.value = args.schedule.packageName
         viewModel.schedule.value = args.schedule.time

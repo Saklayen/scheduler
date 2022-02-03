@@ -2,8 +2,6 @@ package com.saklayen.scheduler.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
@@ -18,13 +16,15 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mNavController by lazy { findNavControllerByFragmentContainerView(R.id.nav_host) }
-    companion object{
+
+    companion object {
         private val TOP_LEVEL_DESTINATIONS = setOf(
             R.id.homeFragment,
             R.id.scheduleListFragment,
             R.id.completedSchedulesFragment
         )
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.bottomNav.setupNavController(mNavController)

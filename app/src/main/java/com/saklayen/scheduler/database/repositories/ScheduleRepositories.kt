@@ -32,5 +32,4 @@ class ScheduleRepositories @Inject constructor(val database: AppDatabase) {
     suspend fun updateScheduleStatus(requestCode: Int, isStarted: Boolean){
         return database.scheduleDao.updateScheduleStatus(requestCode,isStarted)
     }
-
 }

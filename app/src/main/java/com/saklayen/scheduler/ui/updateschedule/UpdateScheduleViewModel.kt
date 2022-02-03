@@ -101,9 +101,26 @@ class UpdateScheduleViewModel @Inject constructor(
 
     val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
         viewModelScope.launch {
-            calendar.set(0, 0, 0, hourOfDay, minute)
-            schedule.value = "Scheduled on: " + dateFormat.format(calendar.time).toString()
-            updateSchedule()
+            calendar.set(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                hourOfDay,
+                minute,
+                0
+            )
+
+            Timber.d(
+                "Time: --> year" + calendar.get(Calendar.YEAR) + " month:" + calendar.get(
+                    Calendar.MONTH
+                ) + "day " + calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            if (calendar.before(Calendar.getInstance())) {
+                _message.trySend("Only future time allowed.")
+            } else {
+                schedule.value = "Scheduled on: " + dateFormat.format(calendar.time).toString()
+                updateSchedule()
+            }
         }
     }
 

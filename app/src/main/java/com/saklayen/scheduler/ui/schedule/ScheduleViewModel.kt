@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -46,7 +47,8 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
 
     lateinit var alarmManager: AlarmManager
 
-    val dateFormat = SimpleDateFormat("hh:mm aa", Locale.US)
+    private val dateFormat = SimpleDateFormat("hh:mm aa")
+    private val dateFormatTest = SimpleDateFormat("yyyy-MMM-dd hh:mm aa")
 
     fun onClickSetSchedule() {
         _showTimePicker.trySend(Unit)
@@ -75,7 +77,7 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
                         dateFormat.format(calendar.time).toString(),
                         appName.value,
                         packageName.value,
-                        requestCode.value.toString(),
+                        requestCode.value,
                         requestCode.value.toString(),
                         false
                     )
@@ -87,9 +89,29 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
 
     val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
         viewModelScope.launch {
-            calendar.set(0, 0, 0, hourOfDay, minute)
-            schedule.value = "Scheduled on: " + dateFormat.format(calendar.time).toString()
-            setSchedule()
+
+            calendar.set(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                hourOfDay,
+                minute,
+                0
+            )
+            Timber.d(
+                "%s%s", "Timed--> " + "Scheduled on: ", dateFormatTest.format(calendar.time).toString()
+            )
+            Timber.d(
+                "Time: --> year" + calendar.get(Calendar.YEAR) + " month:" + calendar.get(
+                    Calendar.MONTH
+                ) + "day " + calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            if (calendar.before(Calendar.getInstance())) {
+                _message.trySend("Only future time allowed.")
+            } else {
+                schedule.value = "Scheduled on: " + dateFormat.format(calendar.time).toString()
+                setSchedule()
+            }
         }
     }
 
@@ -97,7 +119,7 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
         requestCode.value = getRandomInt()
         val myIntent = Intent(context, ScheduleReceiver::class.java)
         myIntent.putExtra("packageName", packageName.value)
-        myIntent.putExtra("requestCode", requestCode.value.toString())
+        myIntent.putExtra("requestCode", requestCode.value)
         return PendingIntent.getBroadcast(
             context,
             requestCode.value,

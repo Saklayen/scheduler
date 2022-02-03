@@ -17,10 +17,10 @@ class ScheduleReceiver : BroadcastReceiver() {
     private var job: Job? = null
     override fun onReceive(context: Context?, intent: Intent?) {
         val packageName = intent?.getStringExtra("packageName")
-        val requestCode = intent?.getStringExtra("requestCode")?.toInt()
+        val requestCode = intent?.getIntExtra("requestCode",0)
         job?.cancel()
         job = GlobalScope.launch(Dispatchers.IO) {
-            requestCode?.let { scheduleRepositories.updateScheduleStatus(it, true) }
+            requestCode?.let { scheduleRepositories.updateScheduleStatus(requestCode, true) }
         }
         val mainIntent =
             packageName?.let { context?.packageManager?.getLaunchIntentForPackage(it) }

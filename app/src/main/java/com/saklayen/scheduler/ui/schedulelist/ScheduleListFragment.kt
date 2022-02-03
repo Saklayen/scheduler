@@ -6,8 +6,6 @@ import androidx.fragment.app.viewModels
 import com.saklayen.scheduler.R
 import com.saklayen.scheduler.base.ui.BaseFragment
 import com.saklayen.scheduler.databinding.FragmentScheduleListBinding
-import com.saklayen.scheduler.ui.home.HomeViewModel
-import com.saklayen.scheduler.ui.schedule.ScheduleViewModel
 import com.saklayen.scheduler.utils.launchAndRepeatWithViewLifecycle
 import com.saklayen.scheduler.utils.navigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +13,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ScheduleListFragment : BaseFragment<FragmentScheduleListBinding>(R.layout.fragment_schedule_list) {
+class ScheduleListFragment :
+    BaseFragment<FragmentScheduleListBinding>(R.layout.fragment_schedule_list) {
     override val haveToolbar = true
     override val resToolbarId = R.id.toolbar
     private val viewModel: ScheduleListViewModel by viewModels()

@@ -15,7 +15,7 @@ data class Schedule(
     val time: String,
     val appName: String,
     val packageName: String,
-    val requestCode: String,
+    val requestCode: Int,
     val tag: String,
     val isStarted: Boolean
 ) : Parcelable
