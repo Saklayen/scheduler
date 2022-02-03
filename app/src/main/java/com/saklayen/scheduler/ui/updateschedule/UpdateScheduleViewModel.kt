@@ -1,4 +1,4 @@
-package com.saklayen.scheduler.ui.schedule
+package com.saklayen.scheduler.ui.updateschedule
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -8,26 +8,26 @@ import android.content.Intent
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saklayen.scheduler.database.model.Schedule
 import com.saklayen.scheduler.database.repositories.ScheduleRepositories
+import com.saklayen.scheduler.ui.schedule.ScheduleReceiver
 import com.saklayen.scheduler.utils.EMPTY
-import com.saklayen.scheduler.utils.getRandomInt
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 
-@DelicateCoroutinesApi
 @HiltViewModel
-class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRepositories) :
-    ViewModel() {
+class UpdateScheduleViewModel @Inject constructor(
+    val scheduleRepositories: ScheduleRepositories
+) : ViewModel() {
+    val rowId = MutableStateFlow(Int.MIN_VALUE)
     val requestCode = MutableStateFlow(Int.MIN_VALUE)
     val appName = MutableStateFlow(String.EMPTY)
     val packageName = MutableStateFlow(String.EMPTY)
@@ -35,69 +35,89 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
     private val _showTimePicker = Channel<Unit>(Channel.CONFLATED)
     val showTimePicker = _showTimePicker.receiveAsFlow()
 
-    private val _setSchedule = Channel<Unit>(Channel.CONFLATED)
-    val setSchedule = _setSchedule.receiveAsFlow()
+    private val _updateSchedule = Channel<Unit>(Channel.CONFLATED)
+    val updateSchedule = _updateSchedule.receiveAsFlow()
 
-    val calendar: Calendar = Calendar.getInstance()
-    var schedule = MutableStateFlow(String.EMPTY)
+    private val _cancelSchedule = Channel<Unit>(Channel.CONFLATED)
+    val cancelSchedule = _cancelSchedule.receiveAsFlow()
 
     private val _message = Channel<String>(Channel.CONFLATED)
     val message = _message.receiveAsFlow()
 
+    val calendar: Calendar = Calendar.getInstance()
+    var schedule = MutableStateFlow(String.EMPTY)
+
     lateinit var alarmManager: AlarmManager
 
-    val dateFormat = SimpleDateFormat("hh:mm aa", Locale.US)
+    private val dateFormat = SimpleDateFormat("hh:mm aa", Locale.US)
 
-    fun onClickSetSchedule() {
+    fun onClickUpdateSchedule() {
         _showTimePicker.trySend(Unit)
     }
 
-    private fun setSchedule() {
-        _setSchedule.trySend(Unit)
+    private fun updateSchedule() {
+        _updateSchedule.trySend(Unit)
     }
 
-    suspend fun setSchedule(context: Context) {
+    suspend fun updateSchedule(context: Context) {
         //check conflict then set schedule
+        val isConflicted =
+            scheduleRepositories.checkConflict(dateFormat.format(calendar.time).toString())?.first()
 
-        viewModelScope.launch {
-            val isConflicted =
-                scheduleRepositories.checkConflict(dateFormat.format(calendar.time).toString())
-                    ?.first()
+        if (isConflicted == true) {
+            Timber.d("Conflicted----->")
+        } else {
 
-            if (isConflicted == true) {
-                _message.trySend("Time Conflicts")
-            } else {
+            updateExactSchedule(calendar.timeInMillis, getPendingIntent(context))
 
-                setExactSchedule(calendar.timeInMillis, getPendingIntent(context))
-                scheduleRepositories.insertSchedule(
-                    Schedule(
-                        0,
-                        dateFormat.format(calendar.time).toString(),
-                        appName.value,
-                        packageName.value,
-                        requestCode.value.toString(),
-                        requestCode.value.toString(),
-                        false
-                    )
+            viewModelScope.launch {
+                scheduleRepositories.updateSchedule(
+                    rowId.value,
+                    dateFormat.format(calendar.time).toString(),
                 )
-
             }
+
+
         }
+    }
+
+    fun cancelSchedule() {
+        _cancelSchedule.trySend(Unit)
+    }
+
+    suspend fun cancelSchedule(context: Context) {
+        alarmManager.cancel(
+            getPendingIntent(context)
+        )
+        viewModelScope.launch {
+            scheduleRepositories.deleteSchedule(
+                rowId.value
+            )
+            _message.trySend("Schedule Cancelled")
+        }
+
+
     }
 
     val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
         viewModelScope.launch {
             calendar.set(0, 0, 0, hourOfDay, minute)
             schedule.value = "Scheduled on: " + dateFormat.format(calendar.time).toString()
-            setSchedule()
+            updateSchedule()
         }
     }
 
+    private fun updateExactSchedule(timeInMillis: Long, pendingIntent: PendingIntent) {
+        updateSchedule(
+            timeInMillis,
+            pendingIntent
+        )
+    }
+
     private fun getPendingIntent(context: Context): PendingIntent {
-        requestCode.value = getRandomInt()
         val myIntent = Intent(context, ScheduleReceiver::class.java)
         myIntent.putExtra("packageName", packageName.value)
-        myIntent.putExtra("requestCode", requestCode.value.toString())
+        myIntent.putExtra("requestCode", requestCode.value)
         return PendingIntent.getBroadcast(
             context,
             requestCode.value,
@@ -106,14 +126,8 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
         )
     }
 
-    private fun setExactSchedule(timeInMillis: Long, pendingIntent: PendingIntent) {
-        setSchedule(
-            timeInMillis,
-            pendingIntent
-        )
-    }
 
-    private fun setSchedule(timeInMillis: Long, pendingIntent: PendingIntent) {
+    private fun updateSchedule(timeInMillis: Long, pendingIntent: PendingIntent) {
         alarmManager.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setExactAndAllowWhileIdle(
@@ -130,5 +144,4 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
             }
         }
     }
-
 }

@@ -14,11 +14,18 @@
         <action
             android:id="@+id/navigate_to_schedule_fragment"
             app:destination="@id/scheduleFragment" />
+        <action
+            android:id="@+id/navigate_to_completed_schedules_fragment"
+            app:destination="@id/completedSchedulesFragment" />
     </fragment>
     <fragment
         android:id="@+id/scheduleListFragment"
         android:name="com.saklayen.scheduler.ui.schedulelist.ScheduleListFragment"
-        android:label="@string/schedule_list" />
+        android:label="@string/schedule_list" >
+        <action
+            android:id="@+id/navigate_to_update_schedule_fragment"
+            app:destination="@id/updateScheduleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/scheduleFragment"
         android:name="com.saklayen.scheduler.ui.schedule.ScheduleFragment"
@@ -29,5 +36,21 @@
             app:argType="string"/>
         <argument android:name="packageName"
             app:argType="string"/>
+        <argument android:name="forModification"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
+    <fragment
+        android:id="@+id/updateScheduleFragment"
+        android:name="com.saklayen.scheduler.ui.updateschedule.UpdateScheduleFragment"
+        android:label="@string/update_schedule">
+
+        <argument
+            android:name="schedule"
+            app:argType="com.saklayen.scheduler.database.model.Schedule" />
+    </fragment>
+    <fragment
+        android:id="@+id/completedSchedulesFragment"
+        android:name="com.saklayen.scheduler.ui.completedschedules.CompletedSchedulesFragment"
+        android:label="@string/completed_schedules" />
 </navigation>

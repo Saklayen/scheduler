@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
-            type="com.saklayen.scheduler.ui.schedulelist.ScheduleListViewModel" />
+            type="com.saklayen.scheduler.ui.updateschedule.UpdateScheduleViewModel" />
 
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/info_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -22,17 +27,17 @@
             app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
-                style="@style/Toolbar"
                 android:id="@+id/toolbar"
+                style="@style/Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:contentDescription="@string/schedule_list"
+                android:contentDescription="@string/update_schedule"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:importantForAccessibility="yes"
-                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:layout_collapseMode="pin"
-                app:title="@string/schedule_list"/>
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+                app:title="@string/update_schedule" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,18 +75,49 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="@dimen/activity_horizontal_margin" />
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="@id/start_guideline"
+
+            <TextView
+                android:id="@+id/app_name"
+                style="@style/TextSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.appName}"
                 app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                app:layout_constraintStart_toStartOf="@id/start_guideline"
                 app:layout_constraintTop_toTopOf="@id/top_guideline"
+                tools:text="@string/app_name_title" />
+
+            <TextView
+                android:id="@+id/time_schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.schedule}"
+                app:layout_constraintBottom_toTopOf="@+id/update_schedule"
+                app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                app:layout_constraintStart_toStartOf="@id/start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/app_name" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/update_schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()->viewModel.onClickUpdateSchedule()}"
+                android:text="@string/update_schedule"
                 app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
-                tools:itemCount="20"
-                tools:listitem="@layout/scheduled_app_item"
-                scheduleListViewModel="@{viewModel}"
-                applicationList="@{viewModel.scheduledApplicationList}"/>
+                app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                app:layout_constraintStart_toStartOf="@id/start_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/app_name" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel_schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()->viewModel.cancelSchedule()}"
+                android:text="@string/cancel_schedule"
+                app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+                app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                app:layout_constraintStart_toStartOf="@id/start_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/update_schedule" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

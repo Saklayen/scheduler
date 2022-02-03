@@ -30,10 +30,8 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:importantForAccessibility="yes"
-                android:gravity="center"
-                app:titleCentered="true"
                 app:layout_collapseMode="pin"
-                app:title="" />
+                app:title="Applications" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,7 +80,7 @@
                 tools:itemCount="20"
                 tools:listitem="@layout/app_item"
                 homeViewModel="@{viewModel}"
-                applicationList="@{viewModel.applicationList}"/>
+                applicationList="@{viewModel.installedApplicationList}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

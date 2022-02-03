@@ -5,25 +5,20 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.saklayen.scheduler.BuildConfig.DATABASE_ENCRYPTION_KEY
-import com.saklayen.scheduler.database.dao.TransactionDao
-import com.saklayen.scheduler.database.dao.WalletsDao
-import com.saklayen.scheduler.database.model.Transaction
-import com.saklayen.scheduler.database.model.Wallet
+import com.saklayen.scheduler.database.dao.ScheduleDao
+import com.saklayen.scheduler.database.model.Schedule
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 
 @Database(
     entities = [
-        Wallet::class,
-    Transaction::class
+        Schedule::class
     ],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-
-    abstract val walletsDao: WalletsDao
-    abstract val transactionDao: TransactionDao
+    abstract val scheduleDao: ScheduleDao
 
     companion object {
         private const val databaseName = "app_database"

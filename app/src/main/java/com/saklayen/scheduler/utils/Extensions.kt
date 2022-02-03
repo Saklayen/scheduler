@@ -45,6 +45,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
 
 class EmptyClass
@@ -396,3 +397,7 @@ inline fun <reified VM : ViewModel> Fragment.parentViewModel(
     noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ) = createViewModelLazy(VM::class, { ownerProducer().viewModelStore }, factoryProducer)
 
+fun getRandomInt(): Int {
+    val seed = AtomicInteger()
+    return seed.getAndIncrement() + System.currentTimeMillis().toInt()
+}

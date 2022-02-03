@@ -1,4 +1,4 @@
-package com.saklayen.scheduler.ui.schedule
+package com.saklayen.scheduler.ui.updateschedule
 
 import android.app.AlarmManager
 import android.app.TimePickerDialog
@@ -9,32 +9,33 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.saklayen.scheduler.R
 import com.saklayen.scheduler.base.ui.BaseFragment
-import com.saklayen.scheduler.databinding.FragmentScheduleBinding
+import com.saklayen.scheduler.databinding.FragmentUpdateScheduleBinding
 import com.saklayen.scheduler.utils.launchAndRepeatWithViewLifecycle
+import com.saklayen.scheduler.utils.navigateUp
 import com.saklayen.scheduler.utils.positiveButton
 import com.saklayen.scheduler.utils.showDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(R.layout.fragment_schedule) {
-    private val viewModel: ScheduleViewModel by viewModels()
+class UpdateScheduleFragment : BaseFragment<FragmentUpdateScheduleBinding>(R.layout.fragment_update_schedule) {
+    private val viewModel: UpdateScheduleViewModel by viewModels()
 
     override val haveToolbar = true
     override val resToolbarId = R.id.toolbar
-    private val args: ScheduleFragmentArgs by navArgs()
+    private val args: UpdateScheduleFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        viewModel.requestCode.value = args.appIndex
-        viewModel.appName.value = args.appName
-        viewModel.packageName.value = args.packageName
+        viewModel.rowId.value = args.schedule.rowid
+        viewModel.requestCode.value = Integer.parseInt(args.schedule.requestCode)
+        viewModel.appName.value = args.schedule.appName
+        viewModel.packageName.value = args.schedule.packageName
+        viewModel.schedule.value = args.schedule.time
 
         viewModel.alarmManager =
             requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -46,15 +47,22 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(R.layout.fragment
                 }
             }
             launch {
-                viewModel.setSchedule.collect {
-                    viewModel.setSchedule(requireContext())
+                viewModel.updateSchedule.collect {
+                    viewModel.updateSchedule(requireContext())
+                }
+            }
+            launch {
+                viewModel.cancelSchedule.collect {
+                    viewModel.cancelSchedule(requireContext())
                 }
             }
             launch {
                 viewModel.message.collect {
                     showDialog {
                         setMessage(it)
-                        positiveButton(getString(R.string.ok))
+                        positiveButton(getString(R.string.ok)){
+                            navigateUp()
+                        }
                     }
                 }
             }
@@ -70,4 +78,5 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(R.layout.fragment
             false
         ).show()
     }
+
 }

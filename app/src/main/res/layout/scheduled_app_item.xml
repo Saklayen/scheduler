@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.saklayen.scheduler.ui.schedulelist.ScheduleListViewModel" />
+
+        <variable
+            name="item"
+            type="com.saklayen.scheduler.database.model.Schedule" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:onClick="@{()->viewModel.onClickAppItem(item)}">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/icon"
+            android:layout_width="@dimen/icon_size_40"
+            android:layout_height="@dimen/icon_size_40"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/app_name"
+            app:layout_constraintBottom_toBottomOf="@+id/startup_time"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/app_name"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/icon_size_40"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@id/icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{item.appName}"
+            tools:text="App Title" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/startup_time"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/icon_size_40"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toBottomOf="@+id/app_name"
+            android:text="@{item.time}"
+            tools:text="Time: 12:40 PM" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -13,4 +13,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="schedule_list">Schedule List</string>
     <string name="schedule">Schedule</string>
+    <string name="update_schedule">Update Schedule</string>
+    <string name="cancel_schedule">Cancel Schedule</string>
+    <string name="app_name_title">App Name</string>
+    <string name="completed_schedules">Completed Schedules</string>
 </resources>

@@ -3,10 +3,8 @@ package com.saklayen.scheduler.base
 import android.app.Application
 import android.content.res.Resources
 import android.os.StrictMode
-import com.facebook.stetho.Stetho
 import com.saklayen.scheduler.BuildConfig
 import com.saklayen.scheduler.R
-import com.saklayen.scheduler.analytics.CrashReportingTree
 import dagger.hilt.android.HiltAndroidApp
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
@@ -30,7 +28,7 @@ class BaseApplication : Application() {
         if (BuildConfig.DEBUG) enableStrictMode()
         initCalligraphy()
         initTimber()
-        Stetho.initializeWithDefaults(this)
+        //Stetho.initializeWithDefaults(this)
     }
 
     private fun enableStrictMode() {
@@ -58,6 +56,6 @@ class BaseApplication : Application() {
     }
 
     private fun initTimber() {
-        Timber.plant(if (BuildConfig.DEBUG) Timber.DebugTree() else CrashReportingTree())
+        Timber.plant(Timber.DebugTree())
     }
 }

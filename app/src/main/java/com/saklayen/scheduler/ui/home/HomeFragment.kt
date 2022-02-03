@@ -11,9 +11,12 @@ import com.saklayen.scheduler.model.App
 import com.saklayen.scheduler.utils.launchAndRepeatWithViewLifecycle
 import com.saklayen.scheduler.utils.navigate
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
@@ -38,32 +41,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
             launch {
                 viewModel.getInstalledApps.collect {
-                    viewModel.applicationList.value = getInstalledApps(false)
+                    viewModel.fetchInstalledApplicationList.tryEmit(requireContext())
 
                 }
             }
         }
-    }
-
-    suspend fun getInstalledApps(getSysPackages: Boolean): ArrayList<App> {
-        val res = ArrayList<App>()
-        val packs = requireActivity().packageManager.getInstalledPackages(0)
-        for (i in 0 until packs.size) {
-            val p: PackageInfo = packs[i]
-            if ((!getSysPackages) && (p.versionName == null)) {
-                continue
-            }
-            val appInfo = App(
-                i,
-                p.applicationInfo.loadLabel(requireActivity().packageManager).toString(),
-                p.packageName
-                //p.applicationInfo.loadIcon(requireActivity().packageManager)
-            )
-
-            res.add(appInfo)
-        }
-        return res
-
     }
 
 }
