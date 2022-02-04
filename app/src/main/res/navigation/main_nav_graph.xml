@@ -30,8 +30,6 @@
         android:id="@+id/scheduleFragment"
         android:name="com.saklayen.scheduler.ui.schedule.ScheduleFragment"
         android:label="@string/schedule">
-        <argument android:name="appIndex"
-            app:argType="integer"/>
         <argument android:name="appName"
             app:argType="string"/>
         <argument android:name="packageName"

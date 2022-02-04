@@ -1,13 +1,11 @@
 package com.saklayen.scheduler.ui.home
 
-import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.saklayen.scheduler.R
 import com.saklayen.scheduler.base.ui.BaseFragment
 import com.saklayen.scheduler.databinding.FragmentHomeBinding
-import com.saklayen.scheduler.model.App
 import com.saklayen.scheduler.utils.launchAndRepeatWithViewLifecycle
 import com.saklayen.scheduler.utils.navigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +29,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 viewModel.navigationActions.collect {
                     navigate(
                         HomeFragmentDirections.navigateToScheduleFragment(
-                            it.appIndex,
                             it.appName,
                             it.packageName
                         )

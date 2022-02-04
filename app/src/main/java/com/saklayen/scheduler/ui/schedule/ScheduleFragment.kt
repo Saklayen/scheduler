@@ -32,7 +32,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(R.layout.fragment
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        viewModel.requestCode.value = args.appIndex
         viewModel.appName.value = args.appName
         viewModel.packageName.value = args.packageName
 

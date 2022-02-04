@@ -99,7 +99,9 @@ class ScheduleViewModel @Inject constructor(val scheduleRepositories: ScheduleRe
                 0
             )
             Timber.d(
-                "%s%s", "Timed--> " + "Scheduled on: ", dateFormatTest.format(calendar.time).toString()
+                "%s%s",
+                "Timed--> " + "Scheduled on: ",
+                dateFormatTest.format(calendar.time).toString()
             )
             Timber.d(
                 "Time: --> year" + calendar.get(Calendar.YEAR) + " month:" + calendar.get(

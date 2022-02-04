@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
@@ -50,19 +51,19 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun getInstalledApps(context: Context, getSysPackages: Boolean): StateFlow<List<App>> {
+
         val res = mutableListOf<App>()
 
         val packs = context.packageManager.getInstalledPackages(0)
         for (i in 0 until packs.size) {
-            val p: PackageInfo = packs[i]
-            if ((!getSysPackages) && (p.versionName == null)) {
+            val packageInfo: PackageInfo = packs[i]
+            if ((!getSysPackages) && (packageInfo.versionName == null)) {
                 continue
             }
             val appInfo = App(
-                i,
-                p.applicationInfo.loadLabel(context.packageManager).toString(),
-                p.packageName,
-                p.applicationInfo.loadIcon(context.packageManager)
+                packageInfo.applicationInfo.loadLabel(context.packageManager).toString(),
+                packageInfo.packageName,
+                packageInfo.applicationInfo.loadIcon(context.packageManager)
             )
             res.add(appInfo)
         }
